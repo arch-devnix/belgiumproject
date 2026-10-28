@@ -90,7 +90,6 @@ function updateProgress(index) {
     }
   }
 
-  // Keep the game screen clean
   progressEl.classList.toggle('is-hidden', !!slides[index].querySelector('#game'));
 }
 
@@ -120,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.getElementById('btn-insert-coin').addEventListener('click', () => {
-  // Click sound is already played by the generic button listener above
   document.getElementById('arcade-landing').style.display = 'none';
   document.getElementById('presentation-wrapper').style.display = 'block';
   updateProgress(currentSlideIndex);
@@ -299,14 +297,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function dragStart(e) {
       if (e.target.closest(".control-btn") || e.target.closest("button")) return;
 
-      // Measure the REAL on-screen position (includes transforms like translateX(-50%))
       const parent = terminal.offsetParent || document.body;
       const r = terminal.getBoundingClientRect();
       const pr = parent.getBoundingClientRect();
       initialLeft = r.left - pr.left - parent.clientLeft;
       initialTop = r.top - pr.top - parent.clientTop;
 
-      // Stop any GSAP intro tween still holding a transform
       if (typeof gsap !== "undefined") gsap.killTweensOf(terminal);
 
       highestZ++;
@@ -358,9 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// --- GLOBAL GSAP CUSTOM CURSOR & FRY SPRITE ---
-// GSAP only handles POSITION + OPACITY. All size/color changes are CSS classes
-// with CSS transitions, so the two systems never fight over the same property.
+// --- CUSTOM CURSOR ---
 document.addEventListener('DOMContentLoaded', () => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -448,7 +442,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cursor.classList.remove.apply(cursor.classList, STATE_CLASSES);
 
     if (btn) {
-      // offsetWidth/Height ignore transforms, so the magnet effect can't distort the size
       const radius = window.getComputedStyle(btn).borderRadius;
       cursor.style.setProperty("--btn-w", (btn.offsetWidth + 10) + "px");
       cursor.style.setProperty("--btn-h", (btn.offsetHeight + 8) + "px");
@@ -458,19 +451,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (state) cursor.classList.add(state);
     if (label) label.textContent = text || "";
 
-    // When leaving a button, glide back to the real pointer
     if (leavingBtn) {
       moveX(mouseX);
       moveY(mouseY);
     }
   }
 
-  // Keep the outline centered on the hovered button, even while it moves (coin magnet)
   gsap.ticker.add(function () {
     if (!hoverBtn) return;
     const r = hoverBtn.getBoundingClientRect();
     if (r.width === 0 && r.height === 0) {
-      // Button was hidden (e.g. landing closed) - release it
       setCursorState(null, "", null);
       return;
     }
@@ -492,15 +482,13 @@ document.addEventListener('DOMContentLoaded', () => {
     showCursor();
   });
 
-  // Reliable "pointer left the window" detection
   document.addEventListener("mouseout", function (e) {
     if (!e.relatedTarget) hideCursor();
   });
   window.addEventListener("blur", hideCursor);
 
-  // Hover states with strict top-down priority
   document.addEventListener("mouseover", function (e) {
-    if (draggingRange) return; // stay in slider mode while dragging
+    if (draggingRange) return;
     const t = e.target;
     if (!t.closest) return;
     const btn = t.closest("button");
@@ -523,14 +511,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Live % readout while the slider moves
   document.addEventListener("input", function (e) {
     if (e.target.matches && e.target.matches('input[type="range"]') && currentState === "is-range" && label) {
       label.textContent = rangePct(e.target);
     }
   });
 
-  // Press squash + keep slider mode during a drag
   document.addEventListener("mousedown", function (e) {
     cursor.classList.add("is-pressed");
     const range = e.target.closest && e.target.closest('input[type="range"]');
@@ -541,13 +527,11 @@ document.addEventListener('DOMContentLoaded', () => {
     cursor.classList.remove("is-pressed");
     if (draggingRange) {
       draggingRange = null;
-      // Re-check what's under the pointer now that the drag is over
       const under = document.elementFromPoint(e.clientX, e.clientY);
       if (under) under.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
     }
   });
 
-  // Fry sprite pop for elements with [data-sprite="fries"]
   document.addEventListener("mouseenter", function (e) {
     if (e.target.closest && e.target.closest("[data-sprite='fries']")) {
       showFrySprite();

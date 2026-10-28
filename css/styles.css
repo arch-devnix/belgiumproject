@@ -20,7 +20,7 @@ html, body {
   user-select: none;
 }
 
-/* ---- Keyboard focus (visible even with the custom cursor) ---- */
+/* ---- Keyboard focus ---- */
 :focus-visible {
   outline: 2px dashed #f7df1e;
   outline-offset: 3px;
@@ -51,7 +51,6 @@ html, body {
 }
 
 /* ---- Frame ---- */
-/* Whole-pixel glitch every few seconds (sub-pixel jitter blurred all text) */
 @keyframes crtAmbientJitter {
   0%   { transform: translate(0, 0); }
   94%  { transform: translate(0, 0); }
@@ -113,11 +112,8 @@ html, body {
   animation: vhsScanlineMove 1.2s linear infinite;
 }
 
-/* ==========================================
-   LANDING PAGE
-   ========================================== */
+/* ---- Landing page ---- */
 
-/* CRT "power on": thin bright line that expands into the picture */
 @keyframes crtPowerOn {
   0%   { transform: scale(1, 0.004); filter: brightness(4); }
   40%  { transform: scale(1, 0.004); filter: brightness(4); }
@@ -213,7 +209,6 @@ html, body {
   letter-spacing: 4px;
 }
 
-/* RGB split glitch on the title every few seconds */
 @keyframes titleGlitch {
   0%, 92%, 100% { text-shadow: 3px 3px 0 #a88d00, 6px 6px 0 #080b14; }
   93% { text-shadow: -3px 0 0 #ff2a6d, 3px 0 0 #05d9e8, 6px 6px 0 #080b14; }
@@ -315,7 +310,6 @@ html, body {
   transition: box-shadow 0.15s ease, border-color 0.15s ease, rotate 0.15s ease;
 }
 
-/* Terminal "lifts" while being dragged */
 .terminal.is-dragging {
   border-color: #33ff33;
   rotate: -1deg;
@@ -366,7 +360,6 @@ html, body {
   white-space: nowrap;
 }
 
-/* Blinking caret (l-blink keyframes live in landing.css) */
 .music-display::after {
   content: "_";
   animation: l-blink 1s steps(2, start) infinite;
@@ -584,7 +577,7 @@ html, body {
   letter-spacing: 3px;
 }
 
-/* ---- Medium screens: stop the landing panels from overlapping ---- */
+/* ---- Medium screens ---- */
 @media (max-width: 1100px), (max-height: 720px) {
   .side-photo-card,
   .credits-terminal {
@@ -608,9 +601,7 @@ html, body {
   }
 }
 
-/* ==========================================
-   PRESENTATION & SLIDE CONTAINER LIFTS
-   ========================================== */
+/* ---- Presentation ---- */
 
 .presentation-wrapper {
   position: absolute;
@@ -626,7 +617,7 @@ canvas {
   width: 100%;
   height: 100%;
   touch-action: none;
-  pointer-events: auto; /* Keeps layout engine active for resizing blocks */
+  pointer-events: auto;
 }
 
 .slide {
@@ -658,7 +649,6 @@ canvas {
   pointer-events: auto;
 }
 
-/* Structural cleanup patch for inner slides */
 .slide-dossier-grid {
   width: 100%;
   height: 100%;
@@ -722,9 +712,7 @@ canvas {
   }
 }
 
-/* ==========================================
-   QUIZ (arcade terminal style) & MOBILE OVERRIDES
-   ========================================== */
+/* ---- Quiz & mobile ---- */
 
 .quiz {
   position: absolute;
@@ -958,7 +946,7 @@ canvas {
   .hint-desktop { display: none; }
 }
 
-/* ---- Reduced motion: no CRT effects, glitches or blinking ---- */
+/* ---- Reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
   .crt-screen,
   .scanlines,
@@ -980,16 +968,13 @@ canvas {
   }
 }
 
-/* ==========================================
-   CUSTOM CURSOR (single source of truth; GSAP only moves it)
-   ========================================== */
+/* ---- Custom cursor ---- */
 
 body.s1-has-cursor,
 body.s1-has-cursor * {
   cursor: none !important;
 }
 
-/* Separate rules on purpose: an unknown pseudo-element would void a combined rule */
 body.s1-has-cursor input[type="range"]::-webkit-slider-thumb {
   cursor: none !important;
 }
@@ -1070,7 +1055,6 @@ body.s1-has-cursor input[type="range"]::-moz-range-thumb {
   color: #090e19;
 }
 
-/* Button outline: size comes from CSS variables set in script.js */
 #gsap-cursor.is-btn {
   width: var(--btn-w, 16px);
   height: var(--btn-h, 16px);
@@ -1078,7 +1062,6 @@ body.s1-has-cursor input[type="range"]::-moz-range-thumb {
   background: rgba(247, 223, 30, 0.18);
 }
 
-/* Volume slider: outline around the thumb + floating % readout */
 #gsap-cursor.is-range {
   width: 20px;
   height: 24px;
@@ -1100,7 +1083,6 @@ body.s1-has-cursor input[type="range"]::-moz-range-thumb {
   opacity: 1;
 }
 
-/* Squash while the mouse button is held */
 #gsap-cursor.is-pressed {
   scale: 0.85;
 }

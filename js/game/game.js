@@ -31,9 +31,27 @@ const WAFFLE_HEIGHT = 120;
 const DIVE_RATIO = 0.6;
 const MAX_STEP = 3;
 
-const MAX_HEALTH = 5;
-const QUESTION_TIME = 10;
-const WRONG_ANSWER_COSTS_HEALTH = true;
+// --- RUN RULES ---
+const RUN_TIME = 40;
+const CHECKPOINTS = 4;
+const WIN_SCORE = 3;
+const CHECKPOINT_EVERY = 5;
+const GATE_CLEARANCE = 200;
+const GATE_WIDTH = 90;
+const GATE_HEIGHT = 190;
+
+// --- CHECKPOINT FLAG ---
+const FLAG_FRAMES = 10;
+const FLAG_COLS = 4;
+const FLAG_W = 16;
+const FLAG_H = 24;
+const FLAG_SCALE = 6;
+const FLAG_POLE = 9;
+const FLAG_FPS = 8;
+const QUESTION_TIME = 6;
+const INVULN_FRAMES = 60;
+const MAX_PATTERN_PARTS = 2;
+const RESULT_LOCK_MS = 400;
 
 const START_SPEED = 8;
 const MAX_SPEED = 15;
@@ -79,6 +97,13 @@ beeImg.src = "assets/images/bee.png";
 
 const forkImg = new Image();
 forkImg.src = "assets/images/fork.png";
+
+const flagImg = new Image();
+flagImg.src = "assets/images/checkpoint_flags.png";
+
+function flagReady() {
+  return flagImg.complete && flagImg.naturalWidth > 0;
+}
 
 const heartImg = new Image();
 heartImg.src = "assets/images/heart_spritesheet_32x32.png";
@@ -147,12 +172,20 @@ let lastTime = 0;
 
 let state = "start";
 let shake = 0;
-let health = MAX_HEALTH;
+let correct = 0;
+let checkpointsDone = 0;
+let sinceCheckpoint = 0;
+let invuln = 0;
+let runEnd = 0;
+let frozenMsLeft = 0;
+let won = false;
+let popups = [];
+let gate = null;
 let speed = START_SPEED;
 let distance = 0;
 let distanceSinceSpawn = 0;
 let nextGap = 600;
-let gameOverTime = 0;
+let resultTime = 0;
 
 let currentQ = null;
 let correctIndex = 0;
@@ -174,15 +207,19 @@ function jump() {
   player.isJumping = true;
 }
 
+function beginRun() {
+  state = "playing";
+  runEnd = Date.now() + RUN_TIME * 1000;
+}
+
 function pressStart() {
   if (!running) return;
 
   if (state === "start") {
-    state = "playing";
-  } else if (state === "gameover" && Date.now() - gameOverTime > 800) {
+    beginRun();
+  } else if (state === "result" && Date.now() - resultTime > RESULT_LOCK_MS) {
     stopGame();
     startGame();
-    state = "playing";
   }
 }
 
@@ -208,7 +245,7 @@ window.addEventListener("keydown", e => {
     return;
   }
 
-  if (state === "gameover") {
+  if (state === "result") {
     if (e.key === "Enter") pressStart();
     return;
   }
@@ -331,6 +368,7 @@ function refillBag() {
   patternBag = [];
   for (const p of PATTERNS) {
     if (speed < p.minSpeed) continue;
+    if (p.parts.length > MAX_PATTERN_PARTS) continue;
     for (let i = 0; i < p.weight; i++) patternBag.push(p);
   }
   shuffle(patternBag);
@@ -367,8 +405,8 @@ function makeObstacle(type) {
 }
 
 function restGap() {
-  const extra = Math.max(150, 500 - (speed - START_SPEED) * 30);
-  return minGap() + Math.random() * extra;
+  const extra = Math.max(250, 600 - (speed - START_SPEED) * 30);
+  return minGap() + 250 + Math.random() * extra;
 }
 
 function spawnNext() {
@@ -388,6 +426,19 @@ function spawnNext() {
   } else {
     nextGap = restGap();
   }
+}
+
+function gateDue() {
+  if (gate || checkpointsDone >= CHECKPOINTS || state !== "playing") return false;
+  const travelFrames = (gameW - player.x) / speed;
+  return sinceCheckpoint >= CHECKPOINT_EVERY * 60 - travelFrames;
+}
+
+function gateSpawnClear() {
+  for (const o of obstacles) {
+    if (o.x + o.width > gameW - GATE_CLEARANCE) return false;
+  }
+  return true;
 }
 
 function forgiveNearby(hitObstacle) {
@@ -418,7 +469,6 @@ function askQuestion() {
   state = "question";
   currentQ = nextQuestion();
 
-  // Smoothly fade out BGM and fade in Trivia Quiz music
   const bgm = document.getElementById('bgm-player');
   if (bgm && isPlaying) {
     fadeOutAudio(bgm, 500);
@@ -426,6 +476,9 @@ function askQuestion() {
   if (quizAudio) {
     fadeInAudio(quizAudio, masterSfxVolume, 500);
   }
+
+  const quizHeader = quizBox.querySelector(".map-screen-header span");
+  if (quizHeader) quizHeader.textContent = "CHECKPOINT " + (checkpointsDone + 1) + "/" + CHECKPOINTS + " // RIGHT ANSWER = +1 HEART";
 
   quizQuestion.textContent = currentQ.question;
 
@@ -457,29 +510,43 @@ function answer(i) {
 
   if (i === correctIndex) {
     playSfx('sfx-right');
+    correct = Math.min(CHECKPOINTS, correct + 1);
+    addPopup("+1 HEART!", "#33ff33");
   } else {
     playSfx('sfx-wrong');
-    if (WRONG_ANSWER_COSTS_HEALTH) {
-      loseHealth();
-    }
+    addPopup("WRONG, NO HEART", "#ff3b3b");
   }
 
+  checkpointsDone++;
   closeQuestion();
+  checkEnd();
 }
 
-function loseHealth() {
-  health--;
-  if (health <= 0) {
-    health = 0;
-    state = "gameover";
-    gameOverTime = Date.now();
+function checkEnd() {
+  if (state === "result") return;
+
+  const remaining = CHECKPOINTS - checkpointsDone;
+  if (remaining <= 0 || correct + remaining < WIN_SCORE) {
+    finishRun();
   }
+}
+
+function finishRun() {
+  if (state === "result") return;
+
+  const wasQuestion = state === "question";
+  frozenMsLeft = Math.max(0, runEnd - Date.now());
+  won = correct >= WIN_SCORE;
+  resultTime = Date.now();
+  if (wasQuestion) closeQuestion();
+  state = "result";
+  keys["ArrowDown"] = false;
+  playSfx(won ? 'sfx-right' : 'sfx-wrong');
 }
 
 function closeQuestion() {
   quizBox.hidden = true;
 
-  // Smoothly fade out Quiz Audio and fade back in BGM
   if (quizAudio) {
     fadeOutAudio(quizAudio, 400);
   }
@@ -488,8 +555,9 @@ function closeQuestion() {
     fadeInAudio(bgm, masterBgmVolume, 500);
   }
 
-  if (state !== "gameover") {
+  if (state !== "result") {
     state = "playing";
+    invuln = INVULN_FRAMES;
   }
 }
 
@@ -498,8 +566,10 @@ function updateTimer() {
   const msLeft = deadline - Date.now();
   if (msLeft <= 0) {
     playSfx('sfx-wrong');
-    loseHealth();
+    addPopup("TIME UP, NO HEART", "#ff3b3b");
+    checkpointsDone++;
     closeQuestion();
+    checkEnd();
     return;
   }
 
@@ -507,8 +577,8 @@ function updateTimer() {
   quizTimer.textContent = secondsLeft + "s";
 
   const blocks = quizBarFill.children;
-  const activeCount = Math.max(0, Math.min(blocks.length, secondsLeft));
-  const isLow = secondsLeft <= 5;
+  const activeCount = Math.max(0, Math.min(blocks.length, Math.ceil(msLeft / (QUESTION_TIME * 1000) * blocks.length)));
+  const isLow = secondsLeft <= 3;
 
   for (let i = 0; i < blocks.length; i++) {
     if (i < activeCount) {
@@ -558,8 +628,11 @@ function logic(step) {
   const move = speed * step;
   distance += move;
 
+  if (invuln > 0) invuln = Math.max(0, invuln - step);
+
   distanceSinceSpawn += move;
-  if (distanceSinceSpawn >= nextGap) {
+  const gateComing = (gate && !gate.triggered) || gateDue();
+  if (distanceSinceSpawn >= nextGap && !gateComing) {
     spawnNext();
   }
 
@@ -568,11 +641,37 @@ function logic(step) {
 
     if (!o.hit && collides(getHitbox(player), getObstacleHitbox(o))) {
       o.hit = true;
+      if (invuln > 0) continue;
+
+      if (correct > 0) addPopup("-1 HEART", "#ff3b3b");
+      correct = Math.max(0, correct - 1);
+      invuln = INVULN_FRAMES;
       shake = 12;
       playSfx('sfx-hit');
       forgiveNearby(o);
-      askQuestion();
+      checkEnd();
       break;
+    }
+  }
+
+  if (state === "playing") {
+    sinceCheckpoint += step;
+
+    if (gateDue() && gateSpawnClear()) {
+      gate = { x: gameW, num: checkpointsDone + 1, triggered: false };
+    }
+
+    if (gate) {
+      gate.x -= move;
+
+      const poleOffset = flagReady() ? FLAG_POLE : GATE_WIDTH / 2;
+      if (!gate.triggered && gate.x + poleOffset <= player.x + player.width / 2) {
+        gate.triggered = true;
+        sinceCheckpoint = 0;
+        askQuestion();
+      }
+
+      if (gate.x + GATE_WIDTH < 0) gate = null;
     }
   }
 
@@ -743,7 +842,73 @@ function drawFrame(img, frame, feetRow, sx = 1, sy = 1) {
   ctx.restore();
 }
 
+function drawGate() {
+  if (!gate) return;
+
+  if (!flagReady()) {
+    drawGateFallback();
+    return;
+  }
+
+  const w = FLAG_W * FLAG_SCALE;
+  const h = FLAG_H * FLAG_SCALE;
+  const frame = Math.floor(Date.now() / (1000 / FLAG_FPS)) % FLAG_FRAMES;
+
+  ctx.save();
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    flagImg,
+    (frame % FLAG_COLS) * FLAG_W, Math.floor(frame / FLAG_COLS) * FLAG_H, FLAG_W, FLAG_H,
+    snap(gate.x), snap(floorY + 4 - h), w, h
+  );
+
+  ctx.textAlign = "center";
+  drawOutlinedText("CHECKPOINT " + gate.num, gate.x + w / 2, floorY + 4 - h - 24, "bold 15px " + UI_FONT, "#f7df1e");
+  drawOutlinedText("QUIZ!", gate.x + w / 2, floorY + 4 - h - 6, "bold 15px " + UI_FONT, "#33ff33");
+  ctx.restore();
+}
+
+function drawGateFallback() {
+  const x = gate.x;
+  const top = floorY - GATE_HEIGHT;
+  const post = 8;
+
+  ctx.save();
+
+  ctx.fillStyle = "#14161a";
+  ctx.fillRect(x - 2, top, post + 4, GATE_HEIGHT);
+  ctx.fillRect(x + GATE_WIDTH - post - 2, top, post + 4, GATE_HEIGHT);
+  ctx.fillStyle = "#f7df1e";
+  ctx.fillRect(x, top, post, GATE_HEIGHT);
+  ctx.fillRect(x + GATE_WIDTH - post, top, post, GATE_HEIGHT);
+
+  const bannerH = 32;
+  const cell = 8;
+  ctx.fillStyle = "#14161a";
+  ctx.fillRect(x - 2, top - 2, GATE_WIDTH + 4, bannerH + 4);
+  for (let cx = 0; cx < GATE_WIDTH; cx += cell) {
+    for (let cy = 0; cy < bannerH; cy += cell) {
+      ctx.fillStyle = ((cx / cell + cy / cell) % 2 === 0) ? "#ffffff" : "#14161a";
+      ctx.fillRect(x + cx, top + cy, Math.min(cell, GATE_WIDTH - cx), cell);
+    }
+  }
+
+  ctx.textAlign = "center";
+  drawOutlinedText("CHECKPOINT " + gate.num, x + GATE_WIDTH / 2, top + bannerH + 24, "bold 15px " + UI_FONT, "#f7df1e");
+  drawOutlinedText("QUIZ!", x + GATE_WIDTH / 2, top + bannerH + 44, "bold 15px " + UI_FONT, "#33ff33");
+
+  ctx.restore();
+}
+
 function drawPlayer() {
+  const flicker = invuln > 0 && Math.floor(invuln / 5) % 2 === 0;
+  ctx.save();
+  if (flicker) ctx.globalAlpha = 0.35;
+  drawPlayerSprite();
+  ctx.restore();
+}
+
+function drawPlayerSprite() {
   if (player.isDiving) {
     const frame = getDiveFrame();
     const squash = player.diveHeight / (DIVE_ART_H * ART_SCALE);
@@ -832,8 +997,8 @@ function drawHearts() {
   ctx.save();
   ctx.imageSmoothingEnabled = false;
 
-  for (let i = 0; i < MAX_HEALTH; i++) {
-    const cell = i < health ? HEART_FULL : HEART_EMPTY;
+  for (let i = 0; i < CHECKPOINTS; i++) {
+    const cell = i < correct ? HEART_FULL : HEART_EMPTY;
     ctx.drawImage(
       heartImg,
       cell.col * HEART_CELL, cell.row * HEART_CELL, HEART_CELL, HEART_CELL,
@@ -841,34 +1006,105 @@ function drawHearts() {
     );
   }
 
+  const markX = 8 + (WIN_SCORE - 1) * (HEART_DRAW + 2);
+  const reached = correct >= WIN_SCORE;
+  ctx.fillStyle = reached ? "#33ff33" : "#f7df1e";
+  ctx.fillRect(markX, 40, HEART_DRAW, 4);
+  ctx.textAlign = "left";
+  drawOutlinedText(
+    reached ? "ENOUGH TO WIN! KEEP THEM!" : "FILL " + WIN_SCORE + " HEARTS TO WIN",
+    8, 64, "bold 16px " + UI_FONT, reached ? "#33ff33" : "#f7df1e"
+  );
+
   ctx.restore();
 }
 
-function drawHud(score) {
+function addPopup(text, color) {
+  popups.push({ text: text, color: color, t0: Date.now() });
+}
+
+function drawPopups() {
+  const now = Date.now();
+  popups = popups.filter(function (p) { return now - p.t0 < 1400; });
+
+  ctx.save();
+  ctx.textAlign = "left";
+  for (const p of popups) {
+    const age = (now - p.t0) / 1400;
+    ctx.globalAlpha = 1 - age * age;
+    drawOutlinedText(p.text, 8, 96 - age * 14, "bold 22px " + UI_FONT, p.color);
+  }
+  ctx.restore();
+}
+
+function drawHeartRow(cx, y, filled) {
+  if (!heartImg.complete || heartImg.naturalWidth === 0) return;
+  const total = CHECKPOINTS * (HEART_DRAW + 2) - 2;
+  ctx.save();
+  ctx.imageSmoothingEnabled = false;
+  for (let i = 0; i < CHECKPOINTS; i++) {
+    const cell = i < filled ? HEART_FULL : HEART_EMPTY;
+    ctx.drawImage(
+      heartImg,
+      cell.col * HEART_CELL, cell.row * HEART_CELL, HEART_CELL, HEART_CELL,
+      cx - total / 2 + i * (HEART_DRAW + 2), y, HEART_DRAW, HEART_DRAW
+    );
+  }
+  ctx.restore();
+}
+
+function runMsLeft() {
+  if (state === "start") return RUN_TIME * 1000;
+  if (state === "result") return frozenMsLeft;
+  return Math.max(0, runEnd - Date.now());
+}
+
+function drawHud() {
   drawHearts();
+  drawPopups();
+
+  const secs = Math.ceil(runMsLeft() / 1000);
+  const timeColor = secs <= 10 && state !== "start" ? "#ff3b3b" : "#f7df1e";
 
   ctx.save();
   ctx.textAlign = "right";
-  drawOutlinedText("SCORE " + String(score).padStart(6, "0"), gameW - 20, 32, "bold 24px " + UI_FONT, "#f7df1e");
+  drawOutlinedText("TIME " + String(secs).padStart(2, "0"), gameW - 20, 32, "bold 24px " + UI_FONT, timeColor);
+  drawOutlinedText("QUESTIONS " + checkpointsDone + "/" + CHECKPOINTS, gameW - 20, 56, "bold 16px " + UI_FONT, "#c9d6e8");
+
+  if (state === "playing" && gate && !gate.triggered && Math.floor(Date.now() / 150) % 2 === 0) {
+    ctx.textAlign = "center";
+    drawOutlinedText("CHECKPOINT AHEAD!", gameW / 2, 90, "bold 22px " + UI_FONT, "#33ff33");
+  }
   ctx.restore();
 }
 
-function drawGameOver(score) {
+function drawResult() {
   ctx.save();
-  ctx.fillStyle = "rgba(9, 14, 25, 0.78)";
+  ctx.fillStyle = "rgba(9, 14, 25, 0.82)";
   ctx.fillRect(0, 0, gameW, DESIGN_H);
 
   ctx.textAlign = "center";
-  drawArcadeText("GAME OVER", gameW / 2, DESIGN_H / 2 - 20, 56, "#ff3b3b", "#8a1a1a");
 
-  ctx.font = "bold 26px " + UI_FONT;
-  ctx.fillStyle = "#f7df1e";
-  ctx.fillText("SCORE " + String(score).padStart(6, "0"), gameW / 2, DESIGN_H / 2 + 30);
+  if (won) {
+    drawArcadeText("YOU WIN!", gameW / 2, DESIGN_H / 2 - 30, 60, "#33ff33", "#1a8a1a");
+    ctx.font = "bold 26px " + UI_FONT;
+    ctx.fillStyle = "#f7df1e";
+    ctx.fillText("CLAIM YOUR CHOCOLATE!", gameW / 2, DESIGN_H / 2 + 20);
+  } else {
+    drawArcadeText("NO CHOCOLATE", gameW / 2, DESIGN_H / 2 - 30, 52, "#ff3b3b", "#8a1a1a");
+    ctx.font = "bold 24px " + UI_FONT;
+    ctx.fillStyle = "#f7df1e";
+    ctx.fillText("BETTER LUCK NEXT TIME!", gameW / 2, DESIGN_H / 2 + 20);
+  }
+
+  ctx.font = "20px " + UI_FONT;
+  ctx.fillStyle = "#c9d6e8";
+  ctx.fillText("HEARTS " + correct + " / " + CHECKPOINTS + "   (NEEDED " + WIN_SCORE + ")", gameW / 2, DESIGN_H / 2 + 62);
 
   if (Math.floor(Date.now() / 500) % 2 === 0) {
     ctx.font = "20px " + UI_FONT;
-    ctx.fillStyle = "#c9d6e8";
-    ctx.fillText(touchQuery.matches ? "[TAP TO RESTART]" : "[PRESS ENTER TO RESTART]", gameW / 2, DESIGN_H / 2 + 75);
+    ctx.fillStyle = "#7285a8";
+    ctx.fillText(touchQuery.matches ? "[TAP FOR NEXT PLAYER]" : "[PRESS ENTER FOR NEXT PLAYER]", gameW / 2, DESIGN_H / 2 + 105);
   }
   ctx.restore();
 }
@@ -895,12 +1131,15 @@ function drawStartScreen() {
 
   ctx.font = "18px " + UI_FONT;
   ctx.fillStyle = "#7285a8";
-  ctx.fillText("Hit an obstacle and you have to answer a question", gameW / 2, 318);
+  ctx.fillText("Right answer = FILL a heart. Hit an obstacle = EMPTY one.", gameW / 2, 308);
+  ctx.fillStyle = "#f7df1e";
+  ctx.fillText("Fill " + WIN_SCORE + " of " + CHECKPOINTS + " hearts in " + RUN_TIME + " seconds to win!", gameW / 2, 334);
+  drawHeartRow(gameW / 2, 346, 0);
 
   if (Math.floor(Date.now() / 500) % 2 === 0) {
     ctx.font = "bold 28px " + UI_FONT;
     ctx.fillStyle = "#f7df1e";
-    ctx.fillText(touch ? "[TAP TO START]" : "[PRESS SPACE TO START]", gameW / 2, 390);
+    ctx.fillText(touch ? "[TAP TO START]" : "[PRESS SPACE TO START]", gameW / 2, 425);
   }
   ctx.restore();
 }
@@ -913,16 +1152,14 @@ function render() {
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.clearRect(0, 0, gameW, DESIGN_H);
 
-  // Screen shake (decays every frame, including behind the quiz popup)
   if (shake > 0) {
     ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
     shake *= 0.85;
     if (shake < 0.5) shake = 0;
   }
 
-  const score = Math.floor(distance / 10);
-
   drawBackground();
+  drawGate();
   drawPlayer();
 
   for (const o of obstacles) {
@@ -936,9 +1173,8 @@ function render() {
     }
   }
 
-  drawHud(score);
+  drawHud();
 
-  // Red hit flash (drawn without the shake offset so it covers the full screen)
   if (shake > 4) {
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
     ctx.fillStyle = "rgba(255, 59, 59, " + (shake / 40) + ")";
@@ -946,9 +1182,8 @@ function render() {
   }
 
   if (state === "start") drawStartScreen();
-  if (state === "gameover") drawGameOver(score);
+  if (state === "result") drawResult();
 }
-
 
 
 // ---
@@ -981,7 +1216,10 @@ function loop(timestamp) {
   if (!running) return;
 
   if (portraitQuery.matches) {
-    if (state === "question" && lastTime !== 0) deadline += timestamp - lastTime;
+    if (lastTime !== 0 && (state === "playing" || state === "question")) {
+      runEnd += timestamp - lastTime;
+      if (state === "question") deadline += timestamp - lastTime;
+    }
     lastTime = timestamp;
     rafId = requestAnimationFrame(loop);
     return;
@@ -995,6 +1233,10 @@ function loop(timestamp) {
 
   if (step > MAX_STEP) step = MAX_STEP;
   if (step < 0) step = 0;
+
+  if ((state === "playing" || state === "question") && Date.now() >= runEnd) {
+    finishRun();
+  }
 
   if (state === "playing") {
     logic(step);
@@ -1026,7 +1268,16 @@ function startGame() {
   player.groundY = floorY - player.height;
   player.y = player.groundY;
 
-  health = MAX_HEALTH;
+  correct = 0;
+  checkpointsDone = 0;
+  sinceCheckpoint = 0;
+  invuln = 0;
+  runEnd = 0;
+  frozenMsLeft = 0;
+  won = false;
+  popups = [];
+  gate = null;
+  shake = 0;
   state = "start";
   quizBox.hidden = true;
 
