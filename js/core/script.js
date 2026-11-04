@@ -141,6 +141,11 @@ function showSlide(index) {
     window.Slide1.stop();
   }
 
+  if (window.Slide2) {
+    if (index === 1) window.Slide2.play();
+    else window.Slide2.stop();
+  }
+
   if (slides[index].querySelector('#game')) {
     window.resizeCanvas();
     window.startGame();
@@ -498,6 +503,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setCursorState("is-fries", "", null);
     } else if (t.closest(".s1-figure")) {
       setCursorState("is-frame", "[GHENT]", null);
+    } else if (t.closest(".s2-map")) {
+      setCursorState("is-frame", "[MAP]", null);
     } else if (t.closest("a, .hud-link")) {
       setCursorState("is-link", "[OPEN]", null);
     } else if (range) {
