@@ -1120,7 +1120,7 @@ function drawStartScreen() {
 
   ctx.font = "16px " + UI_FONT;
   ctx.fillStyle = "#33ff33";
-  ctx.fillText("[FILE_05 // MINI_GAME]", gameW / 2, 110);
+  ctx.fillText("[FILE_07 // MINI_GAME]", gameW / 2, 110);
 
   drawArcadeText(GAME_TITLE, gameW / 2, 175, 56);
 

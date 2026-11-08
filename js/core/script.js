@@ -118,6 +118,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+function openPresentation(index) {
+  document.getElementById('arcade-landing').style.display = 'none';
+  document.getElementById('presentation-wrapper').style.display = 'block';
+  showSlide(index);
+}
+
+document.querySelectorAll('.screen-hud-topleft .hud-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (link.dataset.slide !== undefined) {
+      openPresentation(parseInt(link.dataset.slide, 10));
+    }
+  });
+});
+
 document.getElementById('btn-insert-coin').addEventListener('click', () => {
   document.getElementById('arcade-landing').style.display = 'none';
   document.getElementById('presentation-wrapper').style.display = 'block';
@@ -154,6 +169,16 @@ function showSlide(index) {
   if (window.Slide4) {
     if (index === 3) window.Slide4.play();
     else window.Slide4.stop();
+  }
+
+  if (window.Slide5) {
+    if (index === 4) window.Slide5.play();
+    else window.Slide5.stop();
+  }
+
+  if (window.Slide6) {
+    if (index === 5) window.Slide6.play();
+    else window.Slide6.stop();
   }
 
   if (slides[index].querySelector('#game')) {

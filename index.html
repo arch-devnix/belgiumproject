@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="css/slide2.css">
   <link rel="stylesheet" href="css/slide3.css">
   <link rel="stylesheet" href="css/slide4.css">
+  <link rel="stylesheet" href="css/slide5.css">
+  <link rel="stylesheet" href="css/slide6.css">
   <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
@@ -33,11 +35,14 @@
 
         <div class="screen-hud-topleft">
           <div class="hud-title">SYS_INDEX // DEBUG_LOG.DAT</div>
-          <div class="hud-row"><span class="tag">[ACTIVE]</span> <a href="#" class="hud-link">01. ARCADE_SCREEN</a></div>
-          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link">02. PROJECT_OVERVIEW</a></div>
-          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link">03. BELGIUM_HISTORY</a></div>
-          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link">04. BRUGES_DATA</a></div>
-          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link">05. ARCADE_GAME</a></div>
+          <div class="hud-row"><span class="tag">[ACTIVE]</span> <a href="#" class="hud-link">00. ARCADE_SCREEN</a></div>
+          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link" data-slide="0">01. INTRO</a></div>
+          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link" data-slide="1">02. GEOGRAPHY</a></div>
+          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link" data-slide="2">03. ECONOMY</a></div>
+          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link" data-slide="3">04. CULTURE</a></div>
+          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link" data-slide="4">05. HISTORY</a></div>
+          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link" data-slide="5">06. THE_PITCH</a></div>
+          <div class="hud-row"><span class="tag">[OK]</span> <a href="#" class="hud-link" data-slide="6">07. ARCADE_GAME</a></div>
           <div class="hud-stats">SYS_LOAD: 14% | MEM: 640K</div>
         </div>
 
@@ -93,7 +98,7 @@
             <div class="credit-row"><span class="credit-name">Samuel</span> <span class="credit-role">[Research]</span></div>
             <div class="credit-row"><span class="credit-name">Matthew</span> <span class="credit-role">[Research]</span></div>
             <div class="credit-row"><span class="credit-name">Jacob.R</span> <span class="credit-role">[Booth]</span></div>
-            <div class="credit-row"><span class="credit-name">Jacob.Q</span> <span class="credit-role">[???]</span></div>
+            <div class="credit-row"><span class="credit-name">Jacob.Q</span> <span class="credit-role">[Script]</span></div>
           </div>
         </div>
 
@@ -388,7 +393,7 @@
                     </span>
                   </div>
                   <div class="s4-slot-wrap">
-                    <img src="assets/slideImages/Belgiumcone.png" alt="Belgian fries">
+                    <span class="s4-slot-label">[ IMAGE SLOT ]</span>
                   </div>
                 </div>
                 <div class="s4-text">
@@ -408,7 +413,7 @@
                     </span>
                   </div>
                   <div class="s4-slot-wrap">
-                    <img src="assets/slideImages/liegeWaffle.png" alt="Belgian fries">
+                    <span class="s4-slot-label">[ IMAGE SLOT ]</span>
                   </div>
                 </div>
                 <div class="s4-text">
@@ -462,6 +467,151 @@
           </div>
 
           <div class="s4-footer">
+            <span class="hint-desktop">[PRESS RIGHT ARROW TO PROCEED]</span>
+            <span class="hint-touch">[SWIPE TO PROCEED]</span>
+          </div>
+        </div>
+
+        <!-- ============ SLIDE 5: HISTORY & GOVERNMENT ============ -->
+        <div class="slide s5">
+          <div class="s5-grid">
+
+            <header class="s5-head">
+              <span class="s5-eyebrow" data-scramble="[FILE_05 // HISTORY &amp; GOVERNMENT]">[FILE_05 // HISTORY &amp; GOVERNMENT]</span>
+              <h1 class="s5-title">
+                <span class="s5-title-accent">History:</span>
+                <span class="s5-title-rest">From Empire To Kingdom</span>
+              </h1>
+              <div class="s5-rule">
+                <span class="s5-rule-line"></span>
+                <span class="s5-rule-label">HISTORY &amp; GOVERNMENT</span>
+              </div>
+            </header>
+
+            <div class="s5-body">
+              <div class="s5-timeline">
+                <span class="s5-track"></span>
+                <div class="s5-node">
+                  <span class="s5-dot"></span>
+                  <span class="s5-year">843</span>
+                  <span class="s5-event">The Treaty of Verdun splits the Carolingian Empire. The Low Countries land in Middle Francia.</span>
+                </div>
+                <div class="s5-node">
+                  <span class="s5-dot"></span>
+                  <span class="s5-year">1830</span>
+                  <span class="s5-event">Belgium declares independence from the Netherlands.</span>
+                </div>
+                <div class="s5-node">
+                  <span class="s5-dot"></span>
+                  <span class="s5-year">1831</span>
+                  <span class="s5-event">Leopold I becomes the first king. Every July 21 is now National Day.</span>
+                </div>
+                <div class="s5-node">
+                  <span class="s5-dot"></span>
+                  <span class="s5-year">1993</span>
+                  <span class="s5-event">Belgium becomes a federal state of three regions.</span>
+                </div>
+              </div>
+
+              <div class="s5-today">
+                <span class="s5-today-title">HOW IT RUNS TODAY</span>
+                <div class="s5-today-items">
+                <div class="s5-item">
+                  <span class="s5-key">[GOVERNMENT]</span>
+                  <span class="s5-val">A constitutional monarchy led by King Philippe</span>
+                </div>
+                <div class="s5-item">
+                  <span class="s5-key">[MOTTO]</span>
+                  <span class="s5-val">&ldquo;Unity makes strength&rdquo;</span>
+                </div>
+                <div class="s5-flag s5-frame" data-frame="FLAG">
+                  <div class="map-screen-header">
+                    <span>IMG: FLAG.PNG</span>
+                    <span class="terminal-controls">
+                      <span class="control-btn"></span>
+                      <span class="control-btn"></span>
+                      <span class="control-btn"></span>
+                    </span>
+                  </div>
+                  <div class="s5-slot-wrap">
+                    <span class="s5-slot-label">[ IMAGE SLOT ]</span>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="s5-footer">
+            <span class="hint-desktop">[PRESS RIGHT ARROW TO PROCEED]</span>
+            <span class="hint-touch">[SWIPE TO PROCEED]</span>
+          </div>
+        </div>
+
+        <!-- ============ SLIDE 6: WHY BELGIUM & OUR BOOTH ============ -->
+        <div class="slide s6">
+          <div class="s6-grid">
+
+            <header class="s6-head">
+              <span class="s6-eyebrow" data-scramble="[FILE_06 // THE PITCH]">[FILE_06 // THE PITCH]</span>
+              <h1 class="s6-title">
+                <span class="s6-title-accent">Why Belgium?</span>
+                <span class="s6-title-rest">And What You&rsquo;ll Find At Our Booth</span>
+              </h1>
+              <div class="s6-rule">
+                <span class="s6-rule-line"></span>
+                <span class="s6-rule-label">WHY BELGIUM &amp; OUR BOOTH</span>
+              </div>
+            </header>
+
+            <section class="s6-col">
+              <span class="s6-col-title">WHY FEATURE BELGIUM</span>
+              <ol class="s6-reasons">
+                <li class="s6-reason">
+                  <span class="s6-num">01</span>
+                  <div>
+                    <h2 class="s6-reason-head">So much variety</h2>
+                    <span class="s6-reason-line">Three languages, three regions and ten provinces in one small country.</span>
+                  </div>
+                </li>
+                <li class="s6-reason">
+                  <span class="s6-num">02</span>
+                  <div>
+                    <h2 class="s6-reason-head">A global player</h2>
+                    <span class="s6-reason-line">Diamonds, vaccines, chocolate and fries, all made or traded here.</span>
+                  </div>
+                </li>
+                <li class="s6-reason">
+                  <span class="s6-num">03</span>
+                  <div>
+                    <h2 class="s6-reason-head">Still a secret</h2>
+                    <span class="s6-reason-line">Most people never look past Brussels. We want to change that.</span>
+                  </div>
+                </li>
+              </ol>
+            </section>
+
+            <section class="s6-col">
+              <span class="s6-col-title">OUR BOOTH</span>
+              <div class="s6-frame" data-frame="BOOTH">
+                <div class="map-screen-header">
+                  <span>IMG: BOOTH_CONCEPT.PNG</span>
+                  <span class="terminal-controls">
+                    <span class="control-btn"></span>
+                    <span class="control-btn"></span>
+                    <span class="control-btn"></span>
+                  </span>
+                </div>
+                <div class="s6-slot-wrap">
+                  <span class="s6-slot-label">[ IMAGE SLOT ]</span>
+                </div>
+              </div>
+            </section>
+
+          </div>
+
+          <div class="s6-footer">
             <span class="hint-desktop">[PRESS RIGHT ARROW TO PROCEED]</span>
             <span class="hint-touch">[SWIPE TO PROCEED]</span>
           </div>
@@ -535,6 +685,8 @@
   <script src="js/components/slide2.js"></script>
   <script src="js/components/slide3.js"></script>
   <script src="js/components/slide4.js"></script>
+  <script src="js/components/slide5.js"></script>
+  <script src="js/components/slide6.js"></script>
 
   <!-- Core Presentation -->
   <script src="js/core/script.js"></script>

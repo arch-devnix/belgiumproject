@@ -1,0 +1,226 @@
+/* slide6.css */
+
+.slide.s6 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: clamp(1rem, 4vh, 2.5rem) clamp(1rem, 5vw, 4rem) 3.5rem;
+  background: radial-gradient(ellipse at 50% 0%, #1c2b49 0%, #111a2e 55%, #090e19 100%);
+}
+
+.slide.s6::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(41, 55, 82, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 55, 82, 0.18) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%);
+  z-index: 1;
+}
+
+.s6-grid {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(1rem, 5vh, 3rem) clamp(2rem, 8vw, 6rem);
+  text-align: left;
+}
+
+.s6-head {
+  grid-column: 1 / -1;
+}
+
+.s6-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: #33ff33;
+  letter-spacing: 4px;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.35);
+}
+
+.slide .s6-title {
+  margin: 0.35rem 0 0.8rem;
+  font-size: clamp(1.8rem, 4.2vw, 3.4rem);
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.s6-title-accent {
+  color: #f7df1e;
+  text-shadow: 3px 3px 0 #a88d00, 0 0 18px rgba(247, 223, 30, 0.25);
+}
+
+.s6-rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.s6-rule-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, #f7df1e 0%, #293752 55%, transparent 100%);
+  transform-origin: left center;
+}
+
+.s6-rule-label {
+  font-size: 0.8rem;
+  color: #7285a8;
+  letter-spacing: 4px;
+  white-space: nowrap;
+}
+
+.s6-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.05em 0.15em;
+  margin: 0 -0.05em -0.15em;
+}
+
+.s6-char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.s6-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.2rem, 4vh, 2.2rem);
+  min-height: 0;
+}
+
+.s6-col + .s6-col {
+  padding-left: clamp(1.5rem, 5vw, 4rem);
+  border-left: 1px dashed #293752;
+}
+
+.s6-col-title {
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: #33ff33;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.35);
+}
+
+.s6-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 4vh, 2.2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.s6-reason {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 1.2rem;
+}
+
+.s6-num {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+  color: #f7df1e;
+  text-shadow: 3px 3px 0 #a88d00;
+}
+
+.s6-reason-head {
+  margin: 0 0 0.3rem;
+  font-size: clamp(1rem, 1.35vw, 1.3rem);
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.s6-reason-line {
+  display: block;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  line-height: 1.5;
+  color: #c9d6e8;
+}
+
+.s6-frame {
+  display: flex;
+  flex-direction: column;
+  background: #090e19;
+  border: 2px solid #293752;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+}
+
+.s6-slot-wrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-height: 48vh;
+  width: 100%;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(45deg, rgba(41, 55, 82, 0.35) 0 6px, transparent 6px 12px),
+    #0b1326;
+}
+
+.s6-slot-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.s6-slot-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: #4a5c78;
+}
+
+.s6-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.8rem;
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: #6a7f9e;
+  pointer-events: none;
+}
+
+@media (max-width: 960px), (max-height: 600px) {
+  .slide.s6 {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding-bottom: 4rem;
+  }
+
+  .s6-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    gap: 1.5rem;
+  }
+
+  .s6-col + .s6-col {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+}
