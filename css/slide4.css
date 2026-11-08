@@ -1,0 +1,213 @@
+/* slide4.css */
+
+.slide.s4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: clamp(1rem, 4vh, 2.5rem) clamp(1rem, 5vw, 4rem) 3.5rem;
+  background: radial-gradient(ellipse at 50% 0%, #1c2b49 0%, #111a2e 55%, #090e19 100%);
+}
+
+.slide.s4::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(41, 55, 82, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 55, 82, 0.18) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%);
+  z-index: 1;
+}
+
+.s4-grid {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(1rem, 4vh, 2.5rem);
+  text-align: left;
+}
+
+.s4-head-block {
+  grid-column: 1 / -1;
+}
+
+.s4-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: #33ff33;
+  letter-spacing: 4px;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.35);
+}
+
+.slide .s4-title {
+  margin: 0.35rem 0 0.8rem;
+  font-size: clamp(1.8rem, 4.2vw, 3.4rem);
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.s4-title-accent {
+  color: #f7df1e;
+  text-shadow: 3px 3px 0 #a88d00, 0 0 18px rgba(247, 223, 30, 0.25);
+}
+
+.s4-rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.s4-rule-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, #f7df1e 0%, #293752 55%, transparent 100%);
+  transform-origin: left center;
+}
+
+.s4-rule-label {
+  font-size: 0.8rem;
+  color: #7285a8;
+  letter-spacing: 4px;
+  white-space: nowrap;
+}
+
+.s4-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.05em 0.15em;
+  margin: 0 -0.05em -0.15em;
+}
+
+.s4-char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.s4-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-self: center;
+  max-height: 100%;
+  min-height: 0;
+}
+
+.s4-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-height: 0;
+}
+
+.s4-frame {
+  display: flex;
+  flex-direction: column;
+  background: #090e19;
+  border: 2px solid #293752;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+}
+
+.s4-slot-wrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-height: 0;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(45deg, rgba(41, 55, 82, 0.35) 0 6px, transparent 6px 12px),
+    #0b1326;
+}
+
+.s4-slot-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.s4-slot-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: #4a5c78;
+}
+
+.s4-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.s4-key {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: #33ff33;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.3);
+}
+
+.s4-head {
+  margin: 0;
+  font-size: clamp(1rem, 1.35vw, 1.3rem);
+  line-height: 1.25;
+  color: #f7df1e;
+}
+
+.s4-line {
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
+  line-height: 1.5;
+  color: #c9d6e8;
+}
+
+.s4-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.8rem;
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: #6a7f9e;
+  pointer-events: none;
+}
+
+@media (max-width: 960px), (max-height: 600px) {
+  .slide.s4 {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding-bottom: 4rem;
+  }
+
+  .s4-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    gap: 1.5rem;
+  }
+
+  .s4-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .s4-slot-wrap {
+    min-height: 160px;
+  }
+
+}

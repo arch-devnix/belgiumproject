@@ -1,0 +1,219 @@
+/* slide3.css */
+
+.slide.s3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: clamp(1rem, 4vh, 2.5rem) clamp(1rem, 5vw, 4rem) 3.5rem;
+  background: radial-gradient(ellipse at 50% 0%, #1c2b49 0%, #111a2e 55%, #090e19 100%);
+}
+
+.slide.s3::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(41, 55, 82, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 55, 82, 0.18) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%);
+  z-index: 1;
+}
+
+.s3-grid {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(1rem, 5vh, 3rem) clamp(2rem, 8vw, 6rem);
+  text-align: left;
+}
+
+.s3-head {
+  grid-column: 1 / -1;
+}
+
+.s3-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: #33ff33;
+  letter-spacing: 4px;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.35);
+}
+
+.slide .s3-title {
+  margin: 0.35rem 0 0.8rem;
+  font-size: clamp(1.8rem, 4.2vw, 3.4rem);
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.s3-title-accent {
+  color: #f7df1e;
+  text-shadow: 3px 3px 0 #a88d00, 0 0 18px rgba(247, 223, 30, 0.25);
+}
+
+.s3-rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.s3-rule-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, #f7df1e 0%, #293752 55%, transparent 100%);
+  transform-origin: left center;
+}
+
+.s3-rule-label {
+  font-size: 0.8rem;
+  color: #7285a8;
+  letter-spacing: 4px;
+  white-space: nowrap;
+}
+
+.s3-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.05em 0.15em;
+  margin: 0 -0.05em -0.15em;
+}
+
+.s3-char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.s3-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.1rem, 3.5vh, 2rem);
+  min-height: 0;
+}
+
+.s3-col + .s3-col {
+  padding-left: clamp(1.5rem, 5vw, 4rem);
+  border-left: 1px dashed #293752;
+}
+
+.s3-col-title {
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: #33ff33;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.35);
+}
+
+.s3-big {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.s3-big-num {
+  font-size: clamp(2.6rem, 5.8vw, 5rem);
+  line-height: 1;
+  color: #f7df1e;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 4px 4px 0 #a88d00, 0 0 24px rgba(247, 223, 30, 0.2);
+  white-space: nowrap;
+}
+
+.s3-tag,
+.s3-unit {
+  font-size: 0.45em;
+  text-shadow: none;
+}
+
+.s3-tag {
+  margin-right: 0.2em;
+}
+
+.s3-unit {
+  margin-left: 0.2em;
+}
+
+.s3-big-label {
+  max-width: 28rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  letter-spacing: 3px;
+  color: #6a7f9e;
+}
+
+.s3-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 2.5vh, 1.3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.s3-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.s3-key {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: #33ff33;
+}
+
+.s3-val {
+  font-size: clamp(0.95rem, 1.2vw, 1.2rem);
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+.s3-item-con .s3-key {
+  color: #ff6b6b;
+}
+
+.s3-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.8rem;
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: #6a7f9e;
+  pointer-events: none;
+}
+
+@media (max-width: 960px), (max-height: 600px) {
+  .slide.s3 {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding-bottom: 4rem;
+  }
+
+  .s3-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    gap: 1.5rem;
+  }
+
+  .s3-col + .s3-col {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+}

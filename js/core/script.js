@@ -146,6 +146,16 @@ function showSlide(index) {
     else window.Slide2.stop();
   }
 
+  if (window.Slide3) {
+    if (index === 2) window.Slide3.play();
+    else window.Slide3.stop();
+  }
+
+  if (window.Slide4) {
+    if (index === 3) window.Slide4.play();
+    else window.Slide4.stop();
+  }
+
   if (slides[index].querySelector('#game')) {
     window.resizeCanvas();
     window.startGame();
@@ -505,6 +515,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setCursorState("is-frame", "[GHENT]", null);
     } else if (t.closest(".s2-map")) {
       setCursorState("is-frame", "[MAP]", null);
+    } else if (t.closest("[data-frame]")) {
+      setCursorState("is-frame", "[" + t.closest("[data-frame]").dataset.frame + "]", null);
     } else if (t.closest("a, .hud-link")) {
       setCursorState("is-link", "[OPEN]", null);
     } else if (range) {
