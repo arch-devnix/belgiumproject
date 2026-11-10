@@ -548,7 +548,6 @@
             <span class="hint-touch">[SWIPE TO PROCEED]</span>
           </div>
         </div>
-
         <!-- ============ SLIDE 6: WHY BELGIUM & OUR BOOTH ============ -->
         <div class="slide s6">
           <div class="s6-grid">
@@ -594,17 +593,9 @@
 
             <section class="s6-col">
               <span class="s6-col-title">OUR BOOTH</span>
-              <div class="s6-frame" data-frame="BOOTH">
-                <div class="map-screen-header">
-                  <span>IMG: BOOTH_CONCEPT.PNG</span>
-                  <span class="terminal-controls">
-                    <span class="control-btn"></span>
-                    <span class="control-btn"></span>
-                    <span class="control-btn"></span>
-                  </span>
-                </div>
-                <div class="s6-slot-wrap">
-                  <span class="s6-slot-label">[ IMAGE SLOT ]</span>
+              <div class="s6-frame" data-frame="BOOTH" style="border: none; background: transparent; box-shadow: none;">
+                <div class="s6-slot-wrap" style="padding: 0; overflow: hidden; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                  <img src="assets/slideImages/booth.png" alt="Our Booth Concept" class="pixel-art" style="width: 100%; height: 100%; object-fit: contain; display: block;">
                 </div>
               </div>
             </section>
@@ -617,7 +608,7 @@
           </div>
         </div>
 
-        <!-- Slide 4: Game Mini-Game -->
+        <!-- GAME -->
         <div class="slide">
           <canvas id="game" height="400"></canvas>
 
