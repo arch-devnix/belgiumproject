@@ -113,6 +113,33 @@
   margin: 0;
 }
 
+.s1-points {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0;
+  list-style: none;
+  font-size: 1.05em;
+}
+
+.s1-points li {
+  position: relative;
+  padding-left: 1.5em;
+}
+
+.s1-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.5em;
+  height: 0.5em;
+  background: #33ff33;
+  box-shadow: 0 0 8px rgba(51, 255, 51, 0.5);
+  transform: scale(var(--dot, 1));
+  will-change: transform;
+}
+
 .s1-hl {
   --hl: 0;
   color: #f7df1e;
@@ -330,5 +357,12 @@
 
   .s1-text {
     grid-row: 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s1-glare,
+  #gsap-cursor {
+    display: none;
   }
 }

@@ -2,7 +2,7 @@
 
 (function () {
   const SCRAMBLE_CHARS = "!<>-_\\/[]{}=+*^?#01";
-  const reduceMotion = { matches: false };
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let tl = null;
   let resetCard = null;
@@ -204,6 +204,7 @@
     if (reduceMotion.matches) {
       gsap.set(q(".s1-char, .s1-word"), { clearProps: "all" });
       gsap.set(q(".s1-hl"), { "--hl": 1 });
+      gsap.set(q(".s1-points li"), { "--dot": 1 });
       return;
     }
 
@@ -246,6 +247,10 @@
       { yPercent: 100, opacity: 0 },
       { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.012, ease: "power3.out" },
       0.9);
+    tl.fromTo(paras[0].querySelectorAll("li"),
+      { "--dot": 0 },
+      { "--dot": 1, duration: 0.5, stagger: 0.08, ease: "back.out(3)" },
+      0.9);
     tl.fromTo(paras[0].querySelectorAll(".s1-hl"),
       { "--hl": 0 },
       { "--hl": 1, duration: 0.6, stagger: 0.18, ease: "power2.inOut" },
@@ -272,6 +277,10 @@
       { yPercent: 100, opacity: 0 },
       { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.012, ease: "power3.out" },
       "-=0.3");
+    tl.fromTo(paras[1].querySelectorAll("li"),
+      { "--dot": 0 },
+      { "--dot": 1, duration: 0.5, stagger: 0.08, ease: "back.out(3)" },
+      "<");
     tl.fromTo(paras[1].querySelectorAll(".s1-hl"),
       { "--hl": 0 },
       { "--hl": 1, duration: 0.6, stagger: 0.2, ease: "power2.inOut" },
