@@ -8,8 +8,13 @@ take the number of the response that's correct and subtract 1.
 
 const questions = [
   {
-    question: "In what year did Belgium become independent?",
-    choices: ["1789", "1815", "1830", "1914"],
+    question: "According to travel writer Rick Steves, what is Belgium?",
+    choices: ["One of Europe's best kept secrets", "The capital of Western Europe", "A hidden gem of the Alps", "The medieval heart of the world"],
+    answer: 0,
+  },
+  {
+    question: "Ghent, shown on our first slide, is located in which region of Belgium?",
+    choices: ["Wallonia", "Brussels-Capital", "East Flanders", "Antwerp"],
     answer: 2,
   },
   {
@@ -18,143 +23,108 @@ const questions = [
     answer: 1,
   },
   {
-    question: "Which of these does NOT border Belgium?",
-    choices: ["France", "Germany", "Spain", "Luxembourg"],
-    answer: 2,
-  },
-  {
-    question: "Which Belgian city is the world's diamond hub?",
-    choices: ["Antwerp", "Liège", "Namur", "Leuven"],
-    answer: 0,
-  },
-  {
-    question: "Who called Belgium 'one of Europe's best kept secrets'?",
-    choices: ["Marco Polo", "Rick Steves", "Gordon Ramsay", "Bill Nye"],
-    answer: 1,
-  },
-  {
-    question: "Ghent, shown on our first slide, is in which province?",
-    choices: ["Liège", "Limburg", "East Flanders", "Namur"],
-    answer: 2,
-  },
-  {
     question: "How many provinces does Belgium have?",
     choices: ["5", "8", "10", "12"],
     answer: 2,
   },
   {
-    question: "Which is the biggest Belgian region by population?",
-    choices: ["Flanders", "Wallonia", "Brussels-Capital", "They're all equal"],
+    question: "About how many people live in Belgium?",
+    choices: ["5.5 million", "11.87 million", "20.5 million", "35 million"],
+    answer: 1,
+  },
+  {
+    question: "About how large is Belgium's land area?",
+    choices: ["10,500 km²", "30,689 km²", "85,000 km²", "150,000 km²"],
+    answer: 1,
+  },
+  {
+    question: "Which of Belgium's three regions has the largest population?",
+    choices: ["Flanders", "Wallonia", "Brussels-Capital", "They are all equal"],
     answer: 0,
   },
   {
-    question: "About how big is Belgium?",
-    choices: ["3,000 km²", "30,000 km²", "300,000 km²", "3,000,000 km²"],
-    answer: 1,
-  },
-  {
-    question: "What is 'Noir Belge'?",
-    choices: ["A dark beer", "A black marble", "A chocolate", "A river"],
-    answer: 1,
-  },
-  {
-    question: "Where are many Belgian tomatoes and strawberries grown?",
-    choices: ["Desert farms", "Mountain terraces", "High-tech greenhouses", "Floating gardens"],
+    question: "Belgium is a top 10 agricultural exporter in which economic zone?",
+    choices: ["The Americas", "Asia", "The European Union (EU)", "Worldwide"],
     answer: 2,
   },
   {
-    question: "Which is a main Belgian crop?",
-    choices: ["Sugar beets", "Coffee", "Rice", "Cocoa"],
+    question: "What is Belgium's single biggest export?",
+    choices: ["Diamonds", "Chocolate and beer", "Pharmaceuticals and vaccines", "Frozen fries"],
+    answer: 2,
+  },
+  {
+    question: "Which Belgian city is known as the world capital of diamond trading?",
+    choices: ["Brussels", "Antwerp", "Ghent", "Bruges"],
+    answer: 1,
+  },
+  {
+    question: "What is the average work week length mentioned in our presentation?",
+    choices: ["35 hours", "38 hours", "40 hours", "45 hours"],
+    answer: 1,
+  },
+  {
+    question: "Up to what age is school mandatory in Belgium?",
+    choices: ["Age 14", "Age 16", "Age 18", "Not mandatory"],
+    answer: 2,
+  },
+  {
+    question: "How are Belgian fries (frites) traditionally prepared?",
+    choices: ["Baked in an oven", "Fried once in oil", "Fried twice in beef tallow", "Boiled then fried"],
+    answer: 2,
+  },
+  {
+    question: "Which popular fry sauces are highlighted in our culture slide?",
+    choices: ["Ketchup and mustard", "Ranch and mayo", "Andalouse and samurai", "Tartar and garlic"],
+    answer: 2,
+  },
+  {
+    question: "What makes Liège waffles distinct from Brussels waffles?",
+    choices: ["They are rectangular and light", "They are dense with caramelized pearl sugar", "They are covered in fruit", "They are served frozen"],
+    answer: 1,
+  },
+  {
+    question: "What does Belgian law require for true Belgian chocolate?",
+    choices: ["At least 50% cocoa", "100% cocoa butter with no cheap vegetable oils", "Organic milk only", "No added sugar"],
+    answer: 1,
+  },
+  {
+    question: "Which global music artists are highlighted on our culture slide?",
+    choices: ["Daft Punk and David Guetta", "Stromae and Angèle", "Ed Sheeran and Adele", "ABBA and Avicii"],
+    answer: 1,
+  },
+  {
+    question: "In what year did the Treaty of Verdun split the Carolingian Empire?",
+    choices: ["750", "843", "1066", "1492"],
+    answer: 1,
+  },
+  {
+    question: "In what year did Belgium declare independence from the Netherlands?",
+    choices: ["1789", "1815", "1830", "1914"],
+    answer: 2,
+  },
+  {
+    question: "Who became Belgium's first king in 1831?",
+    choices: ["King Philippe", "Leopold I", "King Albert", "William I"],
+    answer: 1,
+  },
+  {
+    question: "What date is celebrated every year as Belgium's National Day?",
+    choices: ["July 21st", "August 15th", "November 11th", "January 1st"],
     answer: 0,
   },
   {
-    question: "What are Belgium's top exports?",
-    choices: ["Rice and tea", "Coffee beans", "Cotton and wool", "Pharmaceuticals and vaccines"],
-    answer: 3,
-  },
-  {
-    question: "What is Belgium's national dish?",
-    choices: ["Waterzooi", "Moules-Frites", "Stoemp", "Carbonade Flamande"],
-    answer: 1,
-  },
-  {
-    question: "How many times are Belgian fries fried?",
-    choices: ["Once", "Twice", "Three times", "Never, they're baked"],
-    answer: 1,
-  },
-  {
-    question: "Which is a popular Belgian fry sauce?",
-    choices: ["Ranch", "Tzatziki", "Chimichurri", "Andalouse"],
-    answer: 3,
-  },
-  {
-    question: "Carbonade Flamande is a beef stew braised in what?",
-    choices: ["Red wine", "Milk", "Dark ale", "Cider"],
+    question: "In what year did Belgium become a federal state of three regions?",
+    choices: ["1945", "1975", "1993", "2004"],
     answer: 2,
   },
   {
-    question: "Waterzooi is a creamy stew made with chicken or what?",
-    choices: ["Fish", "Lamb", "Rabbit", "Duck"],
-    answer: 0,
-  },
-  {
-    question: "What is stoemp mostly made of?",
-    choices: ["Rice", "Mashed potatoes", "Pasta", "Bread"],
+    question: "What type of government does Belgium run under today?",
+    choices: ["Absolute Monarchy", "Constitutional Monarchy", "Direct Democracy", "Military Dictatorship"],
     answer: 1,
   },
   {
-    question: "Tomate Crevette is a tomato stuffed with what?",
-    choices: ["Cheese", "Tuna", "Grey shrimp", "Eggs"],
-    answer: 2,
-  },
-  {
-    question: "Which waffle is dense, with caramelized pearl sugar?",
-    choices: ["Liège", "Brussels", "Ghent", "Antwerp"],
-    answer: 0,
-  },
-  {
-    question: "What fat does real Belgian chocolate use?",
-    choices: ["Palm oil", "Margarine", "Vegetable oil", "Cocoa butter"],
-    answer: 3,
-  },
-  {
-    question: "When are speculoos cookies traditionally eaten?",
-    choices: ["Summer", "Winter holidays", "Easter", "Halloween"],
-    answer: 1,
-  },
-  {
-    question: "Which Belgian beer label means the strongest?",
-    choices: ["Enkel", "Dubbel", "Tripel", "Quadrupel"],
-    answer: 3,
-  },
-  {
-    question: "Jenever, a Belgian spirit, is flavored with what?",
-    choices: ["Juniper", "Mint", "Anise", "Cherry"],
-    answer: 0,
-  },
-  {
-    question: "Until what age is school mandatory in Belgium?",
-    choices: ["14", "16", "18", "21"],
-    answer: 2,
-  },
-  {
-    question: "Which of these is a top Belgian university?",
-    choices: ["Oxford", "KU Leuven", "Harvard", "Sorbonne"],
-    answer: 1,
-  },
-  {
-    question: "What is Belgium's VAT rate?",
-    choices: ["10%", "15%", "21%", "25%"],
-    answer: 2,
-  },
-  {
-    question: "How long is a normal Belgian work week?",
-    choices: ["32 hours", "35 hours", "38 hours", "45 hours"],
-    answer: 2,
-  },
-  {
-    question: "How is Belgium's weather usually described?",
-    choices: ["Hot and dry", "Grey and rainy", "Snowy all year", "Tropical"],
+    question: "What is Belgium's national motto?",
+    choices: ["Liberty, Equality, Fraternity", "Unity makes strength", "In God we trust", "Strength through peace"],
     answer: 1,
   },
 ];
