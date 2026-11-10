@@ -946,28 +946,6 @@ canvas {
   .hint-desktop { display: none; }
 }
 
-/* ---- Reduced motion ---- */
-@media (prefers-reduced-motion: reduce) {
-  .crt-screen,
-  .scanlines,
-  .arcade-landing,
-  .arcade-landing .game-title,
-  .music-display::after {
-    animation: none;
-  }
-
-  .insert-coin-btn,
-  .music-btn,
-  .terminal,
-  #quiz-choices button {
-    transition: none;
-  }
-
-  .terminal.is-dragging {
-    rotate: none;
-  }
-}
-
 /* ---- Custom cursor ---- */
 
 body.s1-has-cursor,

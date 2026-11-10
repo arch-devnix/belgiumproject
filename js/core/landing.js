@@ -4,7 +4,7 @@
   const html = document.documentElement;
   const landing = document.getElementById("arcade-landing");
   const btn = document.getElementById("btn-insert-coin");
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduce = false;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   function reveal() {

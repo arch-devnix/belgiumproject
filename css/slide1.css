@@ -332,10 +332,3 @@
     grid-row: 3;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .s1-glare,
-  #gsap-cursor {
-    display: none;
-  }
-}

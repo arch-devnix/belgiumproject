@@ -2,7 +2,7 @@
 
 (function () {
   const SCRAMBLE_CHARS = "!<>-_\\/[]{}=+*^?#01";
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const reduceMotion = { matches: false };
 
   let tl = null;
 

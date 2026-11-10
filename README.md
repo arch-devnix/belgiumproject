@@ -43,7 +43,6 @@ A school project built for an upcoming country fair under a tight deadline. Whil
 - **Mobile Supported (Desktop Recommended):** Touch-screen swipe support and on-screen game controls for mobile devices.
 - **Parallax Effect:** Layered background scrolling for immersive visual depth.
 - **Pixel Art:** Pixelated art animations generated from sprite sheets.
-- **Accessibility:** Visible keyboard focus outlines, and animations are toned down or disabled when the system's reduced-motion setting is on.
 
 <br />
 

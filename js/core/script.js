@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- CUSTOM CURSOR ---
 document.addEventListener('DOMContentLoaded', () => {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const reduceMotion = { matches: false };
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   const cursor = document.getElementById("gsap-cursor");
   const label = cursor ? cursor.querySelector(".gsap-cursor-label") : null;
